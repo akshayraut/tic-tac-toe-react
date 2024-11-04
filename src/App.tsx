@@ -7,12 +7,10 @@ import { useState } from 'react';
 
 function App() {
 
-  
-
   const[state, setState] = useState(Array(9).fill(null));
   const [currentTurn, setCurrentTurn] = useState("X");
   const[showMessage, setShowMessage] = useState(false);
-  const[winner, setWinner] = useState<{ inputValueX?: string; inputValueO?: string } | null>(null); // Updated type
+  const[winner, setWinner] = useState<{ inputValueX?: string; inputValueO?: string;} | null | any>(null); // Updated type
   const[isDisable, setIsDisable] = useState(true);
   const [inputValueX, setInputValueX] = useState('');
   const [inputValueO, setInputValueO] = useState('');
@@ -46,7 +44,7 @@ function App() {
     const win = checkWinner(stateCopy);
 
     if(win){
-      let winnerData = (currentTurn == 'X' ? {inputValueX} : {inputValueO});
+      var winnerData = (currentTurn == 'X' ? {inputValueX} : {inputValueO});
       setWinner(winnerData);
       //alert(`Winner is: ${winner}`);
       setShowMessage(true);
@@ -57,6 +55,19 @@ function App() {
     }else{
       setShowMessage(false);
       setIsDisable(false);
+      const allValuesFilled = stateCopy.every(value => value !== null && value !== '');
+      console.log(allValuesFilled," allValuesFilled");
+      if (allValuesFilled) {
+        //winnerData = "Its a Tie";
+        //setWinner("Its a Tie");
+        setShowMessage(true);
+        setIsDisable(true);
+        setInputValueX('');
+        setInputValueO('');
+        alert("Its a Tie");
+        
+        //resetGame(); // Call a function to reset the game if it's a tie
+      }
     }
     //End Winner Logic
     setCurrentTurn(currentTurn === 'X' ? 'O' : 'X'); 
@@ -89,7 +100,7 @@ function App() {
     resetGame();
     
   };
-  console.log(state);
+  //console.log(state);
 
   return (
     <>
